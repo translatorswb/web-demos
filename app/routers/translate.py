@@ -11,7 +11,6 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates/")
 
 MT_API_URL = os.getenv("MT_API_URL")
-print(MT_API_URL)
 #   GAMAYUN_API_TOKEN = os.getenv("API_TOKEN")
 MAX_REQUEST_LENGTH = int(os.getenv('MAX_REQUEST_LENGTH') or "5000")
 
