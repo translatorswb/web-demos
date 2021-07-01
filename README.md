@@ -13,7 +13,7 @@ Required modules are listed in requirements.txt
 
 Clone repository and install required modules
 ```bash
-$ git clone git@github.com:translatorswb/web-demos.git
+$ git clone https://github.com/translatorswb/web-demos.git
 $ cd web-demos
 $ pip install -r requirements.txt
 ```
