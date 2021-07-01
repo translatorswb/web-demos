@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <div class="container-fluid">
+        <img src="static/images/logo.png" id="logo" />
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item {{'active' if active_page == 'home' }}">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item {{'active' if active_page == 'translate' }}">
+                    <a class="nav-link" href="/translate">MT</a>
+                </li>
+                <li class="nav-item {{'active' if active_page == 'transcribe' }}">
+                    <a class="nav-link" href="/transcribe">ASR</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

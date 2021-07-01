@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% set active_page = "translate" %}
+
+{% block title %}Translate{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+
+{% endblock %}
+
+{% block page_content %}
+
+<form id="myForm" method="POST">
+  <div style="width: 100%; display: table;">
+      <h1>Translate API demo</h1>
+      <div style="display: table-row">
+          <div style="width: 49%; display: table-cell;">
+            <select id="srcbox" name="src" style="width:150px;">
+               {% for key, value in api_models.items() %}
+                  <option value={{key}} {% if src == key %} selected {% endif %} >{{ api_languages[key] }}</option>
+               {% endfor %}
+            </select>
+            <br>
+            <textarea class="form-control" name="message" maxlength="{{ maxlength }}" wrap="soft" style="height:150px;resize: vertical;">{{ source }}</textarea>
+            <input type="submit" value="Translate" {% if not src %} disabled {% endif %}> 
+          </div>
+          <div style="width: 2%; display: table-cell;"></div>
+          <div style="width: 49%; display: table-cell;">
+            <select id="tgtbox" name="tgt" style="width:150px;">
+              {% if src in api_models %}
+               {% for key, value in api_models[src].items() %}
+                  <option value={{key}} {% if tgt == key %} selected {% endif %} >{{ api_languages[key] }}</option>
+               {% endfor %}
+              {% endif %}
+            </select>
+            <br>
+            <textarea class="form-control" style="height:150px;background-color: #fff;resize: vertical;" readonly>{{ text1 }}</textarea>
+            <div class="disclaimer">
+              {{ disclaimer }}
+            </div>
+      </div>
+  </div>
+ </div>
+
+</form>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  $('#srcbox').on('change', function(){
+    console.log($('#srcbox').val());
+    $(this).closest('form').submit();
+});
+</script>
+
+{% endblock %}
