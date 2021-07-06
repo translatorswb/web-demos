@@ -12,7 +12,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates/")
 
 ASR_API_URL = os.getenv("ASR_API_URL")
-AUDIO_EXTS = ['.wav', '.WAV', '.mp3', '.MP3'] #Can be extended
+AUDIO_EXTS = ['.wav', '.WAV', '.mp3', '.MP3', '.m4a', '.M4A'] #Can be extended
 INIT_LANG = 'en'
 ASR_API_CONNECTED=False
 
@@ -67,7 +67,7 @@ async def post_upload(file: UploadFile = File(...), lang: str = Form(...)):
     #TODO: Check file extension
     if not os.path.splitext(file.filename)[1] in AUDIO_EXTS:
         print("File not audio")
-        return {'text':'ERROR: Please upload an audio file with extension .mp3 or .wav'}
+        return {'text':'ERROR: Please upload an audio with extension %s'%AUDIO_EXTS}
 
     with open(str(img_full_path), 'wb') as myfile:
         contents = await file.read()
