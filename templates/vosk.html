@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% set active_page = "vosk" %}
+
+{% block title %}Transcribe{% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block page_content %}
+<h1>👩🏽‍🌾Gardening bot</h1>
+<br>
+I can guide you to videos about gardening. 
+<br>
+Just press start and say something like "I want to grow roses", "How do I stop ants?" or "I have no idea where to start". 
+<pre id="log"></pre> 
+
+<style>
+vosk-recognizer {
+    --font-size: 2rem;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    font-family: sans-serif;
+    left: 90%;
+    padding: .5rem;
+    position: fixed;
+    top: 30%; 
+    transform: translate(-50%, -50%);
+}
+</style>
+<vosk-recognizer model-url="model-en-small.tar.gz" oneshot></vosk-recognizer>
+
+<!-- <button onclick="playVideo();return false;">Click me</button> -->
+<div id="video" style="position: fixed;left:50%; transform: translate(-50%, 0%);"></div>
+
+
+<!-- <div class="col-12">
+    <textarea id="result" class="form-control" style="height:150px;background-color: #fff;resize: vertical;" readonly>{{ text }}</textarea>
+    <pre id="log"></pre>
+</div> -->
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script src="{{ url_for('static', path='/js/voskapp.js') }}"></script>
+<!-- <script src="{{ url_for('static', path='/js/voskjs.js') }}"></script> -->
+<!-- <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vosk-browser@0.0.3/dist/vosk.js"></script> -->
+
+{% endblock %}

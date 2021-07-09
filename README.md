@@ -7,7 +7,7 @@ A static simple website to demonstrate TWB's language technology services:
 
 ## Requirements
 
-Required modules are listed in requirements.txt
+Required modules are listed in `requirements.txt`
 
 ## Installation & Usage
 
@@ -38,8 +38,14 @@ Visit [http://127.0.0.1:8080/](http://127.0.0.1:8080/).
 [Alp Öktem](https://alpoktem.github.io)
 
 ## Sources
+
 Main site architecture by [Shinichi Okada](https://github.com/shinokada/fastapi-web-starter) 
+
 Audio recording logic by [addpipe](https://github.com/addpipe/simple-web-audio-recorder-demo)
+
+Kaldi-web interface by [dtreskunov](https://github.com/dtreskunov)
+
+English model by [Alpha Cepei](https://alphacephei.com/vosk/models)
 
 ## Disclaimer
 
