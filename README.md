@@ -18,7 +18,7 @@ $ cd web-demos
 $ pip install -r requirements.txt
 ```
 
-Edit the url endpoints of the APIs you want to use in `.env`
+If you want to connect the API's, specify their URL endpoints in `.env`. (You can skip this if you like)
 
 ```bash
 MT_API_URL=http://localhost:8001/api/v1/translate
