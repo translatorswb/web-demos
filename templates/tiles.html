@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% set active_page = "vosk" %}
+{% set active_page = "tiles" %}
 
 {% block title %}Transcribe{% endblock %}
 
@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block page_content %}
-<h1>👩🏽‍🌾Gardening bot</h1>
+<h1>TILES 👩🏽‍🌾 Gardening bot</h1>
 <br>
 I can guide you to videos about gardening. 
 <br>
@@ -31,7 +31,7 @@ vosk-recognizer {
 </style>
 <vosk-recognizer model-url="model-en-small.tar.gz" oneshot></vosk-recognizer>
 
-<!-- <button onclick="playVideo();return false;">Click me</button> -->
+<button onclick="stopVideo();return false;">Click me</button>
 <div id="video" style="position: fixed;left:50%; transform: translate(-50%, 0%);"></div>
 
 

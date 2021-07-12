@@ -1,7 +1,7 @@
 
 function dostuff (formdata) {
   $.ajax({
-    url: '/vosk/command/',
+    url: '/tiles/command/',
     type: 'post',
     data: formdata,
     contentType: false,

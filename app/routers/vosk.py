@@ -20,14 +20,14 @@ keywords = {"idea":["idea", "ideas", "start"], "ants":["ant", "ants"], "roses":[
             "cherry tomato":["cherry", "tomato", "tomatoes"], "mint":["mint"], "jalapeno":["jalapeno", "pepper"]}
 
 
-@router.get("/vosk", response_class=HTMLResponse)
+@router.get("/tiles", response_class=HTMLResponse)
 def get_vosk(request: Request):
     result = "This app is not working yet"
     
-    return templates.TemplateResponse('vosk.html', context={'request': request, 'text': result})
+    return templates.TemplateResponse('tiles.html', context={'request': request, 'text': result})
 
 
-@router.post("/vosk/command/")
+@router.post("/tiles/command/")
 async def post_vosk(command: str = Form(...)):
     print("Command:", command)
 
