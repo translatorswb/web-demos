@@ -7,7 +7,6 @@ function dostuff (formdata) {
     contentType: false,
     processData: false,
     success: function (data) {
-        console.log(data.id);
         if (data.found) {
             videoId = data.id;
             playVideo();
@@ -473,6 +472,7 @@ var VoskJS = (function() {
                         __log(result.partial)
                     }
                     if (result.result) {
+                        __log(result.text)
                         console.log(result.text);
                         let fd = new FormData();
                         fd.append('command', result.text);
