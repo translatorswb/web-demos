@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% set active_page = "transcribeJS" %}
+
+{% block title %}TranscribeJS{% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block page_content %}
+<div class="col-12 up-area">
+    <h1>Transcribe JS demo</h1>
+    <div class="divTable" style="width: 100%;" >
+        <div class="divTableBody">
+            <div class="divTableRow">
+                <div class="divTableCell">
+                    <select id="langbox" name="lang" style="width:200px;">
+                       {% for key, value in api_languages.items() %}
+                          <option value={{key}} {% if src == key %} selected {% endif %} >{{ api_languages[key] }}</option>
+                       {% endfor %}
+                    </select>
+                </div>
+                <div class="divTableCell">
+                    
+                    <div id="controls">
+                            <button id="recordButton">Record</button>
+                            <button id="stopButton" disabled>Stop</button>
+                    </div>
+                </div>
+            </div>
+            <div class="divTableRow">
+                <div class="divTableCell">
+                    <input type="file" name="file" id="file">
+                </div>
+                <div class="divTableCell">
+                    <div id="audiopanel" style="height:45px;"> <audio></audio> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-12">
+    <!-- <textarea id="result" class="form-control" style="height:150px;background-color: #fff;resize: vertical;" readonly>{{ text }}</textarea> -->
+    <pre id="log"></pre>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/static/js/appJS.js"></script>
+<script src="/static/js/WebAudioRecorder.min.js"></script>
+
+
+{% endblock %}

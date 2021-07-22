@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from .library.helpers import *
-from app.routers import transcribe, translate, vosk
+from app.routers import transcribe, translate, vosk, transcribeJS
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -22,6 +22,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(transcribe.router)
 app.include_router(translate.router)
 app.include_router(vosk.router)
+app.include_router(transcribeJS.router)
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
