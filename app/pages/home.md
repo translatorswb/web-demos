@@ -6,6 +6,8 @@
 <br>
 <a href="/transcribe">Transcribe API</a>
 <br>
+<a href="/transcribe">Transcribe JS</a>
+<br>
 <a href="/tiles">TILES prototype</a>
 </p>
 </div>
