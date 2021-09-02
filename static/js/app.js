@@ -54,6 +54,9 @@ function startRecording() {
 		//get language
 		let lang = $('#langbox').val();
 
+		//get scorer
+		let scorer = $('#scorerbox').val();
+
 		recorder = new WebAudioRecorder(input, {
 		  workerDir: "/static/js/", // must end with slash
 		  encoding: "wav",
@@ -78,8 +81,10 @@ function startRecording() {
 			let fd = new FormData();
 		    fd.append('file', file);
 		    fd.append('lang', lang);
+		    fd.append('scorer', scorer);
 		    console.log("file: ", file);
 		    console.log("lang: ", lang);
+		    console.log("scorer: ", scorer);
 		    uploadData(fd);
 		}
 
@@ -152,14 +157,16 @@ function createDownloadLink(url,filename,encoding) {
 $(function () {
   // dragdrop();
 
-  function preparedata (file, lang) {
+  function preparedata (file, lang, scorer) {
     const img = document.createElement("img");
     img.src = URL.createObjectURL(file);
     let fd = new FormData();
     fd.append('file', file);
     fd.append('lang', lang);
+    fd.append('scorer', scorer);
     console.log("file: ", file);
     console.log("lang: ", lang);
+    console.log("scorer: ", scorer);
     createDownloadLink(img.src, file, "wav");
     uploadData(fd);
   }
@@ -168,15 +175,15 @@ $(function () {
     let imageType = /image.*/;
     let file = $('#file')[0].files[0];
     let lang = $('#langbox').val();
-    $("#howto").text("Uploading your file.");
-    preparedata(file, lang);
+    let scorer = $('#scorerbox').val();
+    preparedata(file, lang, scorer);
   }
 
   // file selected
   $("#file").change(dotranscribe);
 
-  // language changed
-  $("#langbox").change(dotranscribe);
+  // // language changed
+  // $("#langbox").change(dotranscribe);
 });
 
 // Sending AJAX request and upload file

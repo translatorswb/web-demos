@@ -14,7 +14,6 @@ templates = Jinja2Templates(directory="templates/")
 ASR_API_URL = os.getenv("ASR_API_URL")
 AUDIO_EXTS = ['.wav', '.WAV', '.mp3', '.MP3', '.m4a', '.M4A'] #Can be extended
 INIT_LANG = 'en'
-ASR_API_CONNECTED=False
 
 def get_language_info():
     transcribe_url = ASR_API_URL
@@ -37,22 +36,22 @@ def get_language_info():
 
 @router.get("/transcribe", response_class=HTMLResponse)
 def get_upload(request: Request):
-    
     api_langs =  get_language_info()
-    print('api_langs response', api_langs)
+
     if not api_langs:
         result = "Transcribe service not available"
     else:
-        global ASR_API_CONNECTED
-        ASR_API_CONNECTED = True
         result = "Select or record an audio file to transcribe"
+
+    print(api_langs)
 
     return templates.TemplateResponse('transcribe.html', context={'request': request, 'text': result, 'api_languages':api_langs, 'lang':INIT_LANG})
 
 
 @router.post("/transcribe/new/")
-async def post_upload(file: UploadFile = File(...), lang: str = Form(...)):
+async def post_upload(file: UploadFile = File(...), lang: str = Form(...), scorer: str = Form(...)): 
     print('Request in %s'%lang)
+    print("With scorer", scorer)
 
     # create the directory path
     workspace = create_workspace()
@@ -73,30 +72,32 @@ async def post_upload(file: UploadFile = File(...), lang: str = Form(...)):
         contents = await file.read()
         myfile.write(contents)
 
-    if ASR_API_CONNECTED:
-        #Send to ASR API
-        transcribe_url = ASR_API_URL + 'short'
-        print(transcribe_url)
-        
+    
+    #Send to ASR API
+    transcribe_url = ASR_API_URL + 'short'
+    print(transcribe_url)
+    
+    if scorer:
+        payload={'lang': lang, 'scorer':scorer}
+    else:
         payload={'lang': lang}
 
-        files=[('file',(file.filename, open(img_full_path,'rb'), 'audio/wav'))]
-        headers = {}
-        print(files)
+    files=[('file',(file.filename, open(img_full_path,'rb'), 'audio/wav'))]
+    headers = {}
+    print(files)
 
-        try:
-            response = requests.request("POST", transcribe_url, headers=headers, data=payload, files=files)
-        except:
-            result = "Transcribe service not available"
-            
-        if response.status_code == 200:
-            response_json = response.json()
-            result = response_json['transcript']
-        else:
-            response_json = response.json()
-            result = "ERROR: " + response_json['detail']
-    else:
+    try:
+        response = requests.request("POST", transcribe_url, headers=headers, data=payload, files=files)
+    except:
         result = "Transcribe service not available"
+        
+    if response.status_code == 200:
+        response_json = response.json()
+        result = response_json['transcript']
+    else:
+        response_json = response.json()
+        result = "ERROR: " + response_json['detail']
+
 
     #Cleanup
     os.remove(img_full_path)

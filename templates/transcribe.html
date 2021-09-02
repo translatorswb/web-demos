@@ -7,6 +7,9 @@
 {{ super() }}
 {% endblock %}
 
+{% set enrolled_data = api_languages %}
+
+
 {% block page_content %}
 <div class="col-12 up-area">
     <h1>Transcribe API demo</h1>
@@ -14,11 +17,23 @@
         <div class="divTableBody">
             <div class="divTableRow">
                 <div class="divTableCell">
-                    <select id="langbox" name="lang" style="width:200px;">
+                    <input type="hidden"  id="enrolled_id" value="{{ enrolled_data }}">
+
+
+                    <!-- <select id="langbox" onchange="var box=document.getElementById('scorerbox'); box.disabled=false;" name="lang" style="width:200px;"> -->
+                        
+                    <select id="langbox" name="lang" style="width:200px;">    
                        {% for key, value in api_languages.items() %}
-                          <option value={{key}} {% if src == key %} selected {% endif %} >{{ api_languages[key] }}</option>
+                          <option value={{key}} {% if src == key %} selected {% endif %} >{{ api_languages[key]['name'] }}</option>
                        {% endfor %}
                     </select>
+
+                    <select id="scorerbox" name="scorer" {% if not api_languages[lang]['scorers'] %} disabled {% endif %}   style="width:200px;">
+                       {% for key in api_languages[lang]['scorers'] %}
+                          <option value={{key}} {% if src == key %} selected {% endif %} >{{ key }}</option>
+                       {% endfor %}
+                    </select>
+
                 </div>
                 <div class="divTableCell">
                     
@@ -52,6 +67,33 @@
 
 <script src="/static/js/app.js"></script>
 <script src="/static/js/WebAudioRecorder.min.js"></script>
+
+<script>
+  $('#langbox').on('change', function(){
+    var newlang=$('#langbox').val();
+    var box=document.getElementById('scorerbox'); 
+    var languages=document.querySelector('#enrolled_id').value;
+    var languages_x = languages.replaceAll("'", "\"");
+    var languages_data = JSON.parse(languages_x);
+
+    box.options.length = 0;
+
+    if (languages_data[newlang]['scorers'].length > 0){
+        box.disabled=false;
+    }else{
+        box.disabled=true;
+    }
+
+    for (i = 0; i < languages_data[newlang]['scorers'].length; i++) {
+
+      var scorer = languages_data[newlang]['scorers'][i];
+      var opt = document.createElement('option');
+      opt.value = scorer;
+      opt.text = scorer;
+      box.options.add(opt);     
+    }
+});
+</script>
 
 
 {% endblock %}
