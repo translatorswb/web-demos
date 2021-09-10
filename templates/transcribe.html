@@ -24,7 +24,7 @@
                         
                     <select id="langbox" name="lang" style="width:200px;">    
                        {% for key, value in api_languages.items() %}
-                          <option value={{key}} {% if src == key %} selected {% endif %} >{{ api_languages[key]['name'] }}</option>
+                          <option value={{key}} {% if lang == key %} selected {% endif %} >{{ api_languages[key]['name'] }}</option>
                        {% endfor %}
                     </select>
 
