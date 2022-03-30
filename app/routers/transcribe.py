@@ -1,11 +1,11 @@
 from fastapi import Request, Form, APIRouter, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from ..library.helpers import *
-#import httpx
+from ..library.helpers import create_workspace, Path
 import requests
 import json
 from dotenv import load_dotenv
+import os
 load_dotenv()
 
 router = APIRouter()
@@ -13,7 +13,7 @@ templates = Jinja2Templates(directory="templates/")
 
 ASR_API_URL = os.getenv("ASR_API_URL")
 AUDIO_EXTS = ['.wav', '.WAV', '.mp3', '.MP3', '.m4a', '.M4A'] #Can be extended
-INIT_LANG = 'swc'
+INIT_LANG = 'en'
 
 def get_language_info():
     transcribe_url = ASR_API_URL
@@ -77,7 +77,7 @@ async def post_upload(file: UploadFile = File(...), lang: str = Form(...), score
     transcribe_url = ASR_API_URL + 'short'
     print(transcribe_url)
     
-    if scorer:
+    if scorer and not scorer == 'null':
         payload={'lang': lang, 'scorer':scorer}
     else:
         payload={'lang': lang}
@@ -85,6 +85,7 @@ async def post_upload(file: UploadFile = File(...), lang: str = Form(...), score
     files=[('file',(file.filename, open(img_full_path,'rb'), 'audio/wav'))]
     headers = {}
     print(files)
+    print(payload)
 
     try:
         response = requests.request("POST", transcribe_url, headers=headers, data=payload, files=files)
