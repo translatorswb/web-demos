@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% set active_page = "tilesrpi" %}
+
+{% block title %}Transcribe{% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block page_content %}
+<h1>What do you want to grow?</h1>
+<br>
+I can guide you to videos about gardening. 
+<br>
+Activate me by saying "porcupine" and then say something like "I want to grow roses", "How do I stop ants?"
+<pre id="log"></pre> 
+<!-- {{ text }}
+{{ videoid }} -->
+
+<!-- <button onclick="stopVideo();return false;">Click me</button> -->
+<!-- <div id="video" style="position: fixed;left:50%;height: 400px; transform: translate(-50%, 0%);"></div> -->
+<!-- <div class="youtube" id="LcIytqkbdlo" style="width:560px; height: 315px;"></div> -->
+<!-- <iframe width="420" height="345" src="http://www.youtube.com/embed/oHg5SJYRHA0?autoplay=1" frameborder="0" allowfullscreen></iframe> -->
+
+<!-- <iframe src="//www.youtube.com/embed/oHg5SJYRHA0?autoplay=1&mute=1" name="youtube embed" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
+
+<ul id='messages'></ul>
+
+<div id="video-placeholder"  style="display:none"></div> 
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<!-- <script src="/static/js/tilesapp.js">
+let fd = new FormData();
+fd.append('message', 'some message');
+// dostuff(fd);
+// if (this._oneshot) {
+//     this._recognizer.setActive(false).then(updateButton)
+// }
+</script> -->
+<script>
+    function dostuff (formdata) {
+        var v = document.getElementById("video-placeholder");
+        $.ajax({
+          url: 'tilesrpi/intent',
+          type: 'post',
+          data: formdata,
+          contentType: false,
+          processData: false,
+          success: function(data){
+            if (data.found) {
+                videoId = data.id;
+                console.log(data.id)
+                // playVideo();
+                  // if (v.style.display === "none") {
+                  //    v.style.display = "block";
+                  // } else {
+                  //    v.style.display = "none";
+                  // }
+                v.style.display = "block";
+                player.loadVideoById(videoId);
+                player.playVideo();
+            }else{
+                v.style.display = "none"
+                player.pauseVideo();
+            }
+          }
+        });
+    }
+    var ws = new WebSocket("ws://localhost:12101/api/events/intent");
+    ws.onmessage = function(event) {
+        var messages = document.getElementById('messages')
+        var message = document.createElement('li')
+        var content = document.createTextNode(event.data) 
+        // var jsonobj = JSON.parse(event.data);
+        // console.log(event.data)
+        // message.appendChild(content)
+        // messages.appendChild(message)
+        let fd = new FormData();
+        fd.append('intentstr', event.data);
+        dostuff(fd);
+    };
+
+    var wakesocket = new WebSocket("ws://localhost:12101/api/events/wake");
+    wakesocket.onmessage = function(event) {
+        player.pauseVideo();
+    };
+
+    function sendMessage(event) {
+        var input = document.getElementById("messageText")
+        ws.send(input.value)
+        input.value = ''
+        event.preventDefault()
+    }
+
+    var player;
+    var videoId;
+
+    function onYouTubeIframeAPIReady() {
+        console.log(videoId)
+        player = new YT.Player('video-placeholder', {
+            width: 600,
+            height: 400,
+            videoId: videoId,
+            playerVars: {
+                color: 'white',
+                playlist: 'taJ60kskkns,FG0fTKAqZ5g'
+            },
+            events: {
+                onReady: initialize
+            }
+        });
+    }
+
+    function initialize(){
+
+        // Update the controls on load
+        updateTimerDisplay();
+        updateProgressBar();
+
+        // Clear any old interval.
+        clearInterval(time_update_interval);
+
+        // Start interval to update elapsed time display and
+        // the elapsed part of the progress bar every second.
+        time_update_interval = setInterval(function () {
+            updateTimerDisplay();
+            updateProgressBar();
+        }, 1000)
+
+    }
+
+    // This function is called by initialize()
+    function updateTimerDisplay(){
+        // Update current time text display.
+        $('#current-time').text(formatTime( player.getCurrentTime() ));
+        $('#duration').text(formatTime( player.getDuration() ));
+    }
+
+    function formatTime(time){
+        time = Math.round(time);
+
+        var minutes = Math.floor(time / 60),
+        seconds = time - minutes * 60;
+
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        return minutes + ":" + seconds;
+    }
+
+    $('#play').on('click', function () {
+        player.playVideo();
+    });
+
+    $('#pause').on('click', function () {
+        player.pauseVideo();
+    });
+
+
+
+    // function playVideo() {
+    //     document.getElementById("video").innerHTML = "<div id='player'></div>";
+
+    //     // 2. This code loads the IFrame Player API code asynchronously.
+    //     var tag = document.createElement('script');
+
+    //     tag.src = "https://www.youtube.com/iframe_api";
+    //     var firstScriptTag = document.getElementsByTagName('script')[0];
+    //     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    // }
+
+    // // 3. This function creates an <iframe> (and YouTube player)
+    // //    after the API code downloads.
+    // var player;
+    // var videoId;
+    // function onYouTubeIframeAPIReady() {
+    //     player = new YT.Player('player', {
+    //         height: '390',
+    //         width: '640',
+    //         videoId: videoId,
+    //         events: {
+    //             'onReady': onPlayerReady,
+    //             'onStateChange': onPlayerStateChange
+    //         }
+    //     });
+    // }
+
+    // // 4. The API will call this function when the video player is ready.
+    // function onPlayerReady(event) {
+    //     event.target.playVideo();
+    // }
+
+    // // 5. The API calls this function when the player's state changes.
+    // //    The function indicates that when playing a video (state=1),
+    // //    the player should play for six seconds and then stop.
+    // var done = false;
+    // function onPlayerStateChange(event) {
+    //     if (event.data == YT.PlayerState.PLAYING && !done) {
+    //         //setTimeout(stopVideo, 6000);
+    //         done = true;
+    //     }
+    // }
+    // function stopVideo() {
+    //     console.log("Stop video")
+    // }
+    
+</script>
+
+{% endblock %}

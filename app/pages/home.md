@@ -8,7 +8,9 @@
 <br>
 <a href="/transcribe">Transcribe JS</a>
 <br>
-<a href="/tiles">TILES prototype</a>
+<a href="/tilesvosk">TILES VOSK prototype</a>
+<br>
+<a href="/tilesrpi">TILES RPi prototype</a>
 </p>
 </div>
 

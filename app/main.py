@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from .library.helpers import openfile
-from app.routers import transcribe, translate, vosk, transcribeJS
+from app.routers import transcribe, translate, vosk, transcribeJS, tiles
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -23,6 +23,7 @@ app.include_router(transcribe.router)
 app.include_router(translate.router)
 app.include_router(vosk.router)
 app.include_router(transcribeJS.router)
+app.include_router(tiles.router)
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
